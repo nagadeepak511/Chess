@@ -5,7 +5,7 @@ from sys import exit
 pygame.init()
 
 height = 600
-width = 1000
+width = 600
 
 screen = pygame.display.set_mode((width, height))
 pygame.display.set_caption("Chess")
@@ -51,7 +51,7 @@ while True:
 	if start:
 		mouse = pygame.Rect(pygame.mouse.get_pos(), (1, 1))
 		startButton = start.get_rect()
-		startButton.left = 325
+		startButton.left = 300-start.get_rect().width//2
 		startButton.top = 400
 		if mouse.colliderect(startButton) and pygame.mouse.get_pressed()[0]:
 			start = False
@@ -66,8 +66,6 @@ while True:
 		mos_pos = pygame.mouse.get_pos()
 		for i in range(8):
 			for j in range(8):
-				if type(board[i][j]) == objects.King:
-					print(board[i][j].color, board[i][j].isCheck(board))
 				if board[i][j] != 0:
 					 if pygame.mouse.get_pressed()[0] and i == mos_pos[1]//75 and j == mos_pos[0]//75:
 					 	board[i][j].isClicked = True
@@ -75,6 +73,9 @@ while True:
 					 		for n in range(8):
 					 			if (m != i or n != j) and type(board[m][n]) != int and board[m][n].isClicked:
 					 				board[m][n].isClicked = False
+					 			if board[m][n] != 0 and bool(objects.count.value) != board[m][n].color:
+					 				board[m][n].isClicked = False
+
 
 		for event in pygame.event.get():
 			if event.type == pygame.KEYDOWN:
@@ -95,8 +96,8 @@ while True:
 
 	pygame.Surface.fill(screen, 'white')
 	if start:
-		screen.blit(logo, (300,0))
-		screen.blit(start, (325,400))
+		screen.blit(logo, (300-logo.get_rect().width//2,0))
+		screen.blit(start, (300-start.get_rect().width//2,400))
 	elif run:
 		for i in range(8):
 			for j in range(8):
@@ -111,7 +112,5 @@ while True:
 			for j in range(8):
 				if board[i][j] != 0:
 					board[i][j].draw(screen)
-
-		
 
 	pygame.display.update()
